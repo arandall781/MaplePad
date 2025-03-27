@@ -17,7 +17,7 @@ target_link_libraries(hal-MapleBus
 target_compile_options(hal-MapleBus PRIVATE
   -Wall
   -Werror
-  -Os
+  -O3
 )
 
 target_include_directories(hal-MapleBus

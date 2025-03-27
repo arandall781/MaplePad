@@ -129,8 +129,10 @@ class MapleOutStateMachine
             // Shift to left, autopull enabled, 32 bits at a time
             sm_config_set_out_shift(&c, false, true, 32);
 
-            sm_config_set_clkdiv(
-                &c, (sys_freq_khz * (ns_per_bit / 3 * 2)) / maple_out_DOUBLE_PHASE_TICKS / 1000000.0);
+            //sm_config_set_clkdiv(
+            //    &c, (sys_freq_khz * (ns_per_bit / 3 * 2)) / maple_out_DOUBLE_PHASE_TICKS / 1000000.0);
+
+            sm_config_set_clkdiv(&c, 12.5f);
 
             // Load our configuration, and jump to the start of the program
             pio_sm_init(mProgram.mPio, mSmIdx, mProgram.mProgramOffset, &c);

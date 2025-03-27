@@ -106,7 +106,7 @@ void display_select()
 }
 
 // Function to handle the overlay timing on core 1
-void showOverlay()
+void updateOverlay()
 {
     if (isOverlayVisible)
     {
@@ -131,11 +131,7 @@ void showOverlay()
         isOverlayHidden = true;
         isOverlayShown = false;
         lcd->setIsOverlayRendered(false);
-        //if it's been at least 1.5 seconds since last lcd update, go ahead and refresh
-        if(to_ms_since_boot(get_absolute_time()) >= lcdLastUpdated + 300)
-        {
-            lcd->refresh(lastScreen, lastLen, !isOverlayHidden);
-        }
+        lcd->refresh(lastScreen, lastLen, !isOverlayHidden);
     }
 }
 
@@ -168,12 +164,8 @@ void core1()
 
     while (true)
     {
-        showOverlay();
-        // Writes vmu storage to pico flash
-        if(mem != nullptr)
-        {
-            mem->process();
-        }
+        
+        mem->process();
     }
 }
 
@@ -209,12 +201,16 @@ void core0()
             0xFF,
             0x00,
             "Visual Memory",
-            "Version 1.005,1999/04/15,315-6208-03,SEGA Visual Memory System BIOS",
+            "Version 1.005,1999/10/26,315-6208-05,SEGA Visual Memory System BIOS Produced by ",
+            //Version 1.005,1999/10/26,315-6208-05,SEGA Visual Memory System BIOS Produced by 
             12.4,
             13.0);
     std::shared_ptr<client::DreamcastStorage> dreamcastStorage =
         std::make_shared<client::DreamcastStorage>(mem, 0);
     subPeripheral1->addFunction(dreamcastStorage);
+
+    //sleep_ms(5000);
+    //dreamcastStorage->format();
 
     std::shared_ptr<client::DreamcastScreen> dreamcastScreen =
         std::make_shared<client::DreamcastScreen>(screenCb, 48, 32);
@@ -243,9 +239,11 @@ void core0()
     subPeripheral2->addFunction(dreamcastVibration);
     mainPeripheral.addSubPeripheral(subPeripheral2);*/
 
+    //dreamcastStorage->format();
+
     if(lcd != nullptr)
     {
-        isLcdInitialized = lcd->initialize(settings[18]);
+        isLcdInitialized = lcd->initialize(settings[OLED_FLIP]);
     
         if(isLcdInitialized)
         {
@@ -285,6 +283,8 @@ void core0()
             isOverlayVisible = true;
             isOverlayHidden = false;
         }
+
+        updateOverlay();
 
         mainPeripheral.task(time_us_64());
         led_task(mem->getLastActivityTime());
