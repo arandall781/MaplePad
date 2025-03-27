@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.13) 
 
 include(pico_sdk_import.cmake)
 
@@ -32,7 +32,9 @@ target_link_libraries(maplepad PRIVATE
         hardware_i2c
         hardware_spi
         hardware_flash
+        hardware_clocks
         )
 
-
-
+# Serial through USB
+pico_enable_stdio_uart(maplepad 1)
+pico_enable_stdio_usb(maplepad 0)

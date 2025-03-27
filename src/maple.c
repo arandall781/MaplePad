@@ -1532,7 +1532,7 @@ bool __no_inline_not_in_flash_func(vibeHandler)(struct repeating_timer *t) {
 }
 
 int main() {
-  // stdio_init_all();
+  stdio_init_all();
   // set_sys_clock_khz(175000, false); // Overclock seems to lead to instability
 
   adc_init();
@@ -1673,7 +1673,7 @@ int main() {
   gpio_init(PAGE_BUTTON);
   gpio_set_dir(PAGE_BUTTON, GPIO_IN);
   gpio_pull_up(PAGE_BUTTON);
-  gpio_set_irq_enabled(PAGE_BUTTON, GPIO_IRQ_EDGE_FALL, true); 
+  gpio_set_irq_enabled(21, GPIO_IRQ_EDGE_FALL, true); 
   gpio_add_raw_irq_handler(PAGE_BUTTON, pageToggle);
   irq_set_enabled(IO_IRQ_BANK0, true); // enable all gpio interrupts (pagetoggle and input_act)
 

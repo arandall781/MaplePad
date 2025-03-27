@@ -251,8 +251,8 @@ typedef struct ButtonInfo_s {
 } ButtonInfo;
 
 static ButtonInfo ButtonInfos[NUM_BUTTONS] = {
-    {0, 0x0004}, // A
-    {1, 0x0002}, // B
+    {16, 0x0004}, // A - 0
+    {17, 0x0002}, // B - 1
     {4, 0x0400}, // X
     {5, 0x0200}, // Y
     {6, 0x0010}, //  Up
