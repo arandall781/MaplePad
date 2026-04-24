@@ -12,7 +12,7 @@
 #define I2C_SCL 3
 
 // value in KHz
-#define I2C_CLOCK 3000
+#define I2C_CLOCK 400
 
 #define SSD1306_LCDWIDTH 128
 #define SSD1306_LCDHEIGHT 64
