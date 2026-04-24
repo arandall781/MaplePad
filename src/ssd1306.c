@@ -162,8 +162,8 @@ void ssd1306_init() {
         0x00,
         SSD1306_DISPLAYOFF,
         SSD1306_SETMULTIPLEX, 0x3F,
-        SSD1306_SETDISPLAYOFFSET, 0x00,     // keep 0 for now
-        SSD1306_SETSTARTLINE, 0x00,         // ← CHANGED: try 0x00 first (this often fixes bottom shift)
+        SSD1306_SETDISPLAYOFFSET, 0x00,
+        SSD1306_SETSTARTLINE,          // original (no extra byte)
         SSD1306_SEGREMAP0,
         SSD1306_COMSCANINC,
         SSD1306_SETCOMPINS, 0x12,
@@ -173,14 +173,14 @@ void ssd1306_init() {
         SSD1306_SETDISPLAYCLOCKDIV, 0x80,
         SSD1306_CHARGEPUMP, 0x14,
 
-        // SSD1309/CH1116 extras
+        // SSD1309/CH1116 extras (safe)
         0xAD, 0x8A,
         SSD1306_SETVCOMDETECT, 0x40,
 
         SSD1306_DISPLAYON,
 
         SSD1306_MEMORYMODE, 0x00,
-        SSD1306_COLUMNADDR, 0x02, 0x7F,     // horizontal fix (keep this)
+        SSD1306_COLUMNADDR, 0x02, 0x7F,   // horizontal offset fix - keep this
         SSD1306_PAGEADDR, 0, 7
     };
 
