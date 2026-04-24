@@ -158,30 +158,41 @@ void ssd1306SendCommandBuffer(uint8_t *inbuf, int len) {
 }
 
 void ssd1306_init() {
-uint8_t init_cmds[]=
-    {0x00,
-    SSD1306_DISPLAYOFF,
-    SSD1306_SETMULTIPLEX, 0x3f,
-    SSD1306_SETDISPLAYOFFSET, 0x00,
-    SSD1306_SETSTARTLINE,
-    SSD1306_SEGREMAP0,
-    // SSD1306_SEGREMAP127,
-    SSD1306_COMSCANINC,
-    // SSD1306_COMSCANDEC,
-    SSD1306_SETCOMPINS, 0x12,
-    SSD1306_SETCONTRAST, 0xff,
-    SSD1306_DISPLAYALLON_RESUME,
-    SSD1306_NORMALDISPLAY,
-    SSD1306_SETDISPLAYCLOCKDIV, 0x80,
-    SSD1306_CHARGEPUMP, 0x14,
-    SSD1306_DISPLAYON,
-    SSD1306_MEMORYMODE, 0x00,   // 0 = horizontal, 1 = vertical, 2 = page
-    SSD1306_COLUMNADDR, 0, SSD1306_LCDWIDTH-1,  // Set the screen wrapping points
-    SSD1306_PAGEADDR, 0, 7};
+    uint8_t init_cmds[] = {
+        0x00,                          // Start of command stream
+        SSD1306_DISPLAYOFF,            // Display off
+        SSD1306_SETMULTIPLEX, 0x3F,
+        SSD1306_SETDISPLAYOFFSET, 0x00,
+        SSD1306_SETSTARTLINE,          // 0x40
+        SSD1306_SEGREMAP0,             // Normal direction (change to SSD1306_SEGREMAP127 if mirrored)
+        SSD1306_COMSCANINC,            // Normal scan (change to SSD1306_COMSCANDEC if flipped vertically)
+        SSD1306_SETCOMPINS, 0x12,
+        SSD1306_SETCONTRAST, 0xCF,     // Contrast - you can try 0x7F to 0xFF later
+        SSD1306_DISPLAYALLON_RESUME,
+        SSD1306_NORMALDISPLAY,
+        SSD1306_SETDISPLAYCLOCKDIV, 0x80,
+        SSD1306_CHARGEPUMP, 0x14,      // Enable charge pump
 
-    if(OLED_FLIP){
-        init_cmds[7] = SSD1306_SEGREMAP127;
-        init_cmds[8] = SSD1306_COMSCANDEC;
+        // SSD1309 / CH1116 specific commands
+        0xAD, 0x8A,                    // SETDCDC - important for many of these modules
+
+        SSD1306_SETVCOMDETECT, 0x40,
+
+        SSD1306_DISPLAYON,             // Turn display on
+
+        // Memory addressing
+        SSD1306_MEMORYMODE, 0x00,      // Horizontal addressing mode (MaplePad expects this)
+
+        // Critical fix for left-edge junk / shift (most common on CH1116/SSD1309)
+        SSD1306_COLUMNADDR, 0x02, 0x7F,   // Start column = 2, end = 127
+
+        SSD1306_PAGEADDR, 0, 7         // Pages 0 to 7
+    };
+
+    // Handle OLED_FLIP if you have that option enabled
+    if (OLED_FLIP) {
+        init_cmds[5] = SSD1306_SEGREMAP127;   // indices may need slight adjustment if you count differently
+        init_cmds[6] = SSD1306_COMSCANDEC;
     }
 
     ssd1306SendCommandBuffer(init_cmds, sizeof(init_cmds));
