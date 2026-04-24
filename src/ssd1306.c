@@ -162,7 +162,7 @@ void ssd1306_init() {
         0x00,
         SSD1306_DISPLAYOFF,
         SSD1306_SETMULTIPLEX, 0x3F,
-        SSD1306_SETDISPLAYOFFSET, 0x00,     // we'll change this next if needed
+        SSD1306_SETDISPLAYOFFSET, 0x0F,     // we'll change this next if needed
         SSD1306_SETSTARTLINE, 0x00,         // ← CHANGED: this is the main fix we're testing
         SSD1306_SEGREMAP0,
         SSD1306_COMSCANINC,
