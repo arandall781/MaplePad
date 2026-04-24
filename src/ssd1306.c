@@ -158,30 +158,35 @@ void ssd1306SendCommandBuffer(uint8_t *inbuf, int len) {
 }
 
 void ssd1306_init() {
-    uint8_t init_cmds[]=
-        {0x00,
+    uint8_t init_cmds[] = {
+        0x00,
         SSD1306_DISPLAYOFF,
-        SSD1306_SETMULTIPLEX, 0x3f,
-        SSD1306_SETDISPLAYOFFSET, 0x00,
-        SSD1306_SETSTARTLINE,
+        SSD1306_SETMULTIPLEX, 0x3F,
+        SSD1306_SETDISPLAYOFFSET, 0x00,     // keep 0 for now
+        SSD1306_SETSTARTLINE, 0x00,         // ← CHANGED: try 0x00 first (this often fixes bottom shift)
         SSD1306_SEGREMAP0,
-        // SSD1306_SEGREMAP127,
         SSD1306_COMSCANINC,
-        // SSD1306_COMSCANDEC,
         SSD1306_SETCOMPINS, 0x12,
-        SSD1306_SETCONTRAST, 0xff,
+        SSD1306_SETCONTRAST, 0xCF,
         SSD1306_DISPLAYALLON_RESUME,
         SSD1306_NORMALDISPLAY,
         SSD1306_SETDISPLAYCLOCKDIV, 0x80,
         SSD1306_CHARGEPUMP, 0x14,
-        SSD1306_DISPLAYON,
-        SSD1306_MEMORYMODE, 0x00,   // 0 = horizontal, 1 = vertical, 2 = page
-        SSD1306_COLUMNADDR, 0, SSD1306_LCDWIDTH-1,  // Set the screen wrapping points
-        SSD1306_PAGEADDR, 0, 7};
 
-    if(OLED_FLIP){
-        init_cmds[7] = SSD1306_SEGREMAP127;   // note: index may be 6 or 7 depending on your original
-        init_cmds[8] = SSD1306_COMSCANDEC;
+        // SSD1309/CH1116 extras
+        0xAD, 0x8A,
+        SSD1306_SETVCOMDETECT, 0x40,
+
+        SSD1306_DISPLAYON,
+
+        SSD1306_MEMORYMODE, 0x00,
+        SSD1306_COLUMNADDR, 0x02, 0x7F,     // horizontal fix (keep this)
+        SSD1306_PAGEADDR, 0, 7
+    };
+
+    if (OLED_FLIP) {
+        init_cmds[5] = SSD1306_SEGREMAP127;
+        init_cmds[6] = SSD1306_COMSCANDEC;
     }
 
     ssd1306SendCommandBuffer(init_cmds, sizeof(init_cmds));
