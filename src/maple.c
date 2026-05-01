@@ -753,7 +753,7 @@ void SendControllerStatus() {
       ControllerPacket.Controller.JoyY = map(yRead, yCenter + yDeadzone, yMax - yAntiDeadzone, 0x81, 0xFF);
   }
 
-if (triggerMode) { // analog
+if (triggerMode) { // analog, GP28 = L, GP29 = R
     adc_select_input(2);
     uint8_t lRead = adc_read() >> 4;
     if (invertL) {
@@ -1531,9 +1531,11 @@ int main() {
   adc_set_clkdiv(0);
   adc_gpio_init(26); // Stick X
   adc_gpio_init(27); // Stick Y
-if (triggerMode) { // analog
+  
+if (triggerMode) {
     adc_gpio_init(28); // Left Trigger
     adc_gpio_init(29); // Right Trigger
+}
 } else { // digital, GP16 = L, GP17 = R
     gpio_init(16);
     gpio_set_dir(16, GPIO_IN);
