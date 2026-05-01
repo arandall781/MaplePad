@@ -1529,21 +1529,21 @@ int main() {
 
   adc_init();
   adc_set_clkdiv(0);
-  adc_gpio_init(26); // Stick X
+adc_gpio_init(26); // Stick X
   adc_gpio_init(27); // Stick Y
-  
-if (triggerMode) {
+
+  if (triggerMode) {
     adc_gpio_init(28); // Left Trigger
     adc_gpio_init(29); // Right Trigger
-}
-} else { // digital, GP16 = L, GP17 = R
+  } else { // digital, GP16 = L, GP17 = R
     gpio_init(16);
     gpio_set_dir(16, GPIO_IN);
     gpio_pull_up(16);
     gpio_init(17);
     gpio_set_dir(17, GPIO_IN);
     gpio_pull_up(17);
-}
+  }
+
   gpio_init(25);
   gpio_set_dir(25, GPIO_OUT);
   gpio_put(25, 0);
