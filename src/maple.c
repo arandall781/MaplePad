@@ -760,44 +760,43 @@ void SendControllerStatus() {
       ControllerPacket.Controller.JoyY = map(yRead, yCenter + yDeadzone, yMax - yAntiDeadzone, 0x81, 0xFF);
   }
 
-  adc_select_input(2);
-  uint8_t lRead = adc_read() >> 4;
-  if (invertL) {
-    if (lRead >= (lMax - lDeadzone)) // deadzone
-      ControllerPacket.Controller.LeftTrigger = 0x00;
-    else
-      ControllerPacket.Controller.LeftTrigger = map(lRead, lMin + lDeadzone, lMax - lAntiDeadzone, 0xFF, 0x01);
-  } else {
-    if (lRead <= (lMin + lDeadzone)) // deadzone
-      ControllerPacket.Controller.LeftTrigger = 0x00;
-    else
-      ControllerPacket.Controller.LeftTrigger = map(lRead, lMin + lDeadzone, lMax - lAntiDeadzone, 0x01, 0xFF);
-  }
+if (triggerMode) { // analog
+    adc_select_input(2);
+    uint8_t lRead = adc_read() >> 4;
+    if (invertL) {
+      if (lRead >= (lMax - lDeadzone))
+        ControllerPacket.Controller.LeftTrigger = 0x00;
+      else
+        ControllerPacket.Controller.LeftTrigger = map(lRead, lMin + lDeadzone, lMax - lAntiDeadzone, 0xFF, 0x01);
+    } else {
+      if (lRead <= (lMin + lDeadzone))
+        ControllerPacket.Controller.LeftTrigger = 0x00;
+      else
+        ControllerPacket.Controller.LeftTrigger = map(lRead, lMin + lDeadzone, lMax - lAntiDeadzone, 0x01, 0xFF);
+    }
 
-  adc_select_input(3);
-  uint8_t rRead = adc_read() >> 4;
-  if (invertR) {
-    if (rRead >= (rMax - rDeadzone)) // deadzone
-      ControllerPacket.Controller.RightTrigger = 0x00;
-    else
-      ControllerPacket.Controller.RightTrigger = map(rRead, rMin + rDeadzone, rMax - rAntiDeadzone, 0xFF, 0x01);
-  } else {
-    if (rRead <= (rMin + rDeadzone)) // deadzone
-      ControllerPacket.Controller.RightTrigger = 0x00;
-    else
-      ControllerPacket.Controller.RightTrigger = map(rRead, rMin + rDeadzone, rMax - rAntiDeadzone, 0x01, 0xFF);
-  }
+    adc_select_input(3);
+    uint8_t rRead = adc_read() >> 4;
+    if (invertR) {
+      if (rRead >= (rMax - rDeadzone))
+        ControllerPacket.Controller.RightTrigger = 0x00;
+      else
+        ControllerPacket.Controller.RightTrigger = map(rRead, rMin + rDeadzone, rMax - rAntiDeadzone, 0xFF, 0x01);
+    } else {
+      if (rRead <= (rMin + rDeadzone))
+        ControllerPacket.Controller.RightTrigger = 0x00;
+      else
+        ControllerPacket.Controller.RightTrigger = map(rRead, rMin + rDeadzone, rMax - rAntiDeadzone, 0x01, 0xFF);
+    }
 
-  if (swapXY) {
-    uint8_t temp = ControllerPacket.Controller.JoyX;
-    ControllerPacket.Controller.JoyX = ControllerPacket.Controller.JoyY;
-    ControllerPacket.Controller.JoyY = temp;
-  }
-
-  if (swapLR) {
-    uint8_t temp = ControllerPacket.Controller.LeftTrigger;
-    ControllerPacket.Controller.LeftTrigger = ControllerPacket.Controller.RightTrigger;
-    ControllerPacket.Controller.RightTrigger = temp;
+    if (swapLR) {
+      uint8_t temp = ControllerPacket.Controller.LeftTrigger;
+      ControllerPacket.Controller.LeftTrigger = ControllerPacket.Controller.RightTrigger;
+      ControllerPacket.Controller.RightTrigger = temp;
+    }
+  } else { // digital, GP16 = L, GP17 = R
+    ControllerPacket.Controller.LeftTrigger  = gpio_get(16) ? 0x00 : 0xFF;
+    ControllerPacket.Controller.RightTrigger = gpio_get(17) ? 0x00 : 0xFF;
   }
 
 #endif
@@ -1539,9 +1538,17 @@ int main() {
   adc_set_clkdiv(0);
   adc_gpio_init(26); // Stick X
   adc_gpio_init(27); // Stick Y
-  adc_gpio_init(28); // Left Trigger
-  adc_gpio_init(29); // Right Trigger
-
+if (triggerMode) { // analog
+    adc_gpio_init(28); // Left Trigger
+    adc_gpio_init(29); // Right Trigger
+} else { // digital, GP16 = L, GP17 = R
+    gpio_init(16);
+    gpio_set_dir(16, GPIO_IN);
+    gpio_pull_up(16);
+    gpio_init(17);
+    gpio_set_dir(17, GPIO_IN);
+    gpio_pull_up(17);
+}
   gpio_init(25);
   gpio_set_dir(25, GPIO_OUT);
   gpio_put(25, 0);
