@@ -29,7 +29,7 @@
 #define HKT7300 1 // Arcade stick
 
 #if HKT7700
-#define NUM_BUTTONS 9
+#define NUM_BUTTONS 11
 #elif HKT7300
 #define NUM_BUTTONS 11
 #endif
@@ -259,7 +259,9 @@ static ButtonInfo ButtonInfos[NUM_BUTTONS] = {
     {7, 0x0020}, // Down
     {8, 0x0040}, // Left
     {9, 0x0080}, // Right
-    {10, 0x0008} // Start
+{10, 0x0008}, // Start
+    {16, 0x0000}, // L Trigger digital (GP16)
+    {17, 0x0000}  // R Trigger digital (GP17)
 #if HKT7300
     ,
     {16, 0x0001}, // C
