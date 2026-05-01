@@ -262,9 +262,4 @@ static ButtonInfo ButtonInfos[NUM_BUTTONS] = {
 {10, 0x0008}, // Start
     {16, 0x0000}, // L Trigger digital (GP16)
     {17, 0x0000}  // R Trigger digital (GP17)
-#if HKT7300
-    ,
-    {16, 0x0001}, // C
-    {17, 0x0100}  // Z
-#endif
 };
