@@ -581,6 +581,14 @@ int tConfig(menu *self) {
   currentNumEntries = sizeof(triggerConfig) / sizeof(menu);
   prevEntryModifier = entryModifier;
   entryModifier = 0;
+
+  for (int i = 0; i < 7; i++) {
+    triggerConfig[i].visible = true;
+    triggerConfig[i].selected = false;
+  }
+  triggerConfig[0].selected = true;
+  selectedEntry = 0;
+
   return (1);
 }
 
