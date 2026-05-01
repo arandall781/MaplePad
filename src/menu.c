@@ -566,13 +566,14 @@ int sConfig(menu *self) {
   return (1);
 }
 
-static menu triggerConfig[6] = {
-  {"Back          ", 2, 1, 0, 1, 1, mainmen}, 
-  {"Calibration   ", 2, 1, 1, 1, 1, tCal}, 
-  {"Deadzone Edit ", 2, 1, 0, 1, 1, tDeadzone}, 
-  {"Invert L      ", 1, 1, 0, 0, 1, toggleOption}, 
-  {"Invert R      ", 1, 1, 0, 0, 1, toggleOption}, 
-  {"Swap L&R      ", 1, 0, 0, 0, 1, toggleOption}
+static menu triggerConfig[7] = {
+  {"Back          ", 2, 1, 0, 1, 1, mainmen},      // index 0
+  {"Analog Mode   ", 1, 1, 1, 0, 1, toggleOption}, // index 1
+  {"Calibration   ", 2, 1, 0, 1, 1, tCal},         // index 2
+  {"Deadzone Edit ", 2, 1, 0, 1, 1, tDeadzone},    // index 3
+  {"Invert L      ", 1, 1, 0, 0, 1, toggleOption}, // index 4
+  {"Invert R      ", 1, 1, 0, 0, 1, toggleOption}, // index 5
+  {"Swap L&R      ", 1, 0, 0, 0, 1, toggleOption}  // index 6
 };
 
 int tConfig(menu *self) {
@@ -615,9 +616,10 @@ void loadFlags() {
   stickConfig[3].on = invertX;
   stickConfig[4].on = invertY;
   stickConfig[5].on = swapXY;
-  triggerConfig[3].on = invertL;
-  triggerConfig[4].on = invertR;
-  triggerConfig[5].on = swapLR;
+  triggerConfig[1].on = triggerMode;
+  triggerConfig[4].on = invertL;
+  triggerConfig[5].on = invertR;
+  triggerConfig[6].on = swapLR;
   settings[2].on = rumbleEnable;
   settings[3].on = vmuEnable;
   settings[6].on = oledFlip;
@@ -628,9 +630,10 @@ void updateFlags() {
   invertX = stickConfig[3].on;
   invertY = stickConfig[4].on;
   swapXY = stickConfig[5].on;
-  invertL = triggerConfig[3].on;
-  invertR = triggerConfig[4].on;
-  swapLR = triggerConfig[5].on;
+  triggerMode = triggerConfig[1].on;
+  invertL = triggerConfig[4].on;
+  invertR = triggerConfig[5].on;
+  swapLR = triggerConfig[6].on;
   rumbleEnable = settings[2].on;
   vmuEnable = settings[3].on;
   oledFlip = settings[6].on;
