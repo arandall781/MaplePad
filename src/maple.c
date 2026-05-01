@@ -30,13 +30,6 @@
 #define PICO 1
 #define MAPLEPAD 0
 
-// HKT-7700 (Standard Controller) or HKT-7300 (Arcade Stick) (see maple.h)
-#if HKT7700
-#define NUM_BUTTONS 9
-#elif HKT7300
-#define NUM_BUTTONS 11
-#endif
-
 // Purupuru Enable
 #define ENABLE_RUMBLE 1
 
