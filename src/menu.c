@@ -563,6 +563,14 @@ int sConfig(menu *self) {
   currentNumEntries = sizeof(stickConfig) / sizeof(menu);
   prevEntryModifier = entryModifier;
   entryModifier = 0;
+
+  for (int i = 0; i < 6; i++) {
+    stickConfig[i].visible = true;
+    stickConfig[i].selected = false;
+  }
+  stickConfig[0].selected = true;
+  selectedEntry = 0;
+
   return (1);
 }
 
@@ -617,6 +625,14 @@ int setting(menu *self) {
   currentNumEntries = sizeof(settings) / sizeof(menu);
   prevEntryModifier = entryModifier;
   entryModifier = 0;
+
+  for (int i = 0; i < 11; i++) {
+    settings[i].visible = true;
+    settings[i].selected = false;
+  }
+  settings[0].selected = true;
+  selectedEntry = 0;
+
   return (1);
 }
 
