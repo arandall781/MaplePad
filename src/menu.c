@@ -546,14 +546,6 @@ int mainmen(menu *self) {
   currentMenu = mainMenu;
   currentNumEntries = sizeof(mainMenu) / sizeof(menu);
   entryModifier = prevEntryModifier;
-
-  for (int i = 0; i < 6; i++) {
-    mainMenu[i].visible = true;
-    mainMenu[i].selected = false;
-  }
-  mainMenu[0].selected = true;
-  selectedEntry = 0;
-
   return (1);
 }
 
@@ -625,14 +617,6 @@ int setting(menu *self) {
   currentNumEntries = sizeof(settings) / sizeof(menu);
   prevEntryModifier = entryModifier;
   entryModifier = 0;
-
-  for (int i = 0; i < 11; i++) {
-    settings[i].visible = true;
-    settings[i].selected = false;
-  }
-  settings[0].selected = true;
-  selectedEntry = 0;
-
   return (1);
 }
 
