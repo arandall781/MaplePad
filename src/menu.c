@@ -563,9 +563,16 @@ int sConfig(menu *self) {
   currentNumEntries = sizeof(stickConfig) / sizeof(menu);
   prevEntryModifier = entryModifier;
   entryModifier = 0;
+
+  for (int i = 0; i < 6; i++) {
+    stickConfig[i].visible = (i < 5);
+    stickConfig[i].selected = false;
+  }
+  stickConfig[0].selected = true;
+  selectedEntry = 0;
+
   return (1);
 }
-
 static menu triggerConfig[7] = {
   {"Back          ", 2, 1, 0, 1, 1, mainmen},      // index 0
   {"Analog Mode   ", 1, 1, 1, 0, 1, toggleOption}, // index 1
@@ -582,8 +589,8 @@ int tConfig(menu *self) {
   prevEntryModifier = entryModifier;
   entryModifier = 0;
 
-  for (int i = 0; i < 7; i++) {
-    triggerConfig[i].visible = true;
+for (int i = 0; i < 7; i++) {
+    triggerConfig[i].visible = (i < 5);
     triggerConfig[i].selected = false;
   }
   triggerConfig[0].selected = true;
