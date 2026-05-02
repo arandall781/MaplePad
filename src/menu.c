@@ -678,16 +678,17 @@ void getLastVisibleEntry() {
 void redrawMenu() {
   clearDisplay();
 
+  int row = 0;
   for (int n = 0; n < currentNumEntries; n++) {
     if (currentMenu[n].visible) {
-      int row = n + (int8_t)entryModifier;
-      if (row < 0 || row > 4) continue;
       putString(currentMenu[n].name, 0, row, color);
       if (currentMenu[n].type == 1)
         drawToggle(row, color, currentMenu[n].on);
+      if (currentMenu[n].selected)
+        drawCursor(row, color);
+      row++;
     }
   }
-  drawCursor(selectedEntry + (int8_t)entryModifier, color);
   updateDisplay();
 }
 
